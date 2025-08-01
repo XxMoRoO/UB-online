@@ -1,0 +1,17 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBHWm3713GF22h-1T6u1cqfzMmFv41pIrI",
+  authDomain: "baz-sport-pos.firebaseapp.com",
+  projectId: "baz-sport-pos",
+  storageBucket: "baz-sport-pos.firebasestorage.app",
+  messagingSenderId: "179097622532",
+  appId: "1:179097622532:web:a698b9cb0fc4e7b158bd51"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Unique Bags POS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Tajawal:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- تمت إضافة مكتبة Supabase هنا -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary-bg: #FFFBF7;
+            --secondary-bg: #F5EBEB;
+            --primary-text: #4B4242;
+            --accent-color: #B0888E;
+            --highlight-color: #D4A3A9;
+        }
+
+        body {
+            font-family: 'Poppins', 'Tajawal', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 105vh;
+            margin: 0;
+        }
+
+        body[dir="rtl"] {
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 2.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            box-sizing: border-box;
+        }
+
+        input {
+            background-color: #FDF6F6;
+            border: 1px solid #EAE0E0;
+            color: var(--primary-text);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 0 2px rgba(212, 163, 169, 0.3);
+        }
+
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+            transition: background-color 0.3s;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--highlight-color);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle-icon {
+            position: absolute;
+            top: 50%;
+            right: 0.75rem;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #A09393;
+        }
+
+        .logo {
+            max-width: 120px;
+            margin: 0 auto 2rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="flex flex-col items-center">
+        <div class="flex justify-center mb-6">
+            <img src="build/logo.png" alt="Unique Bags Logo" class="h-28 w-28">
+        </div>
+
+        <div id="login-view">
+            <form id="login-form" class="form-container">
+                <h1 class="text-2xl font-bold text-center mb-6">Unique Bags Login</h1>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2" for="login-username">Username (Email)</label>
+                    <input class="shadow-inner appearance-none border rounded-lg w-full py-2 px-3" id="login-username"
+                        type="email" placeholder="user@example.com" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-sm font-bold mb-2" for="login-password">Password</label>
+                    <div class="password-container">
+                        <input class="shadow-inner appearance-none border rounded-lg w-full py-2 px-3 pr-10"
+                            id="login-password" type="password" placeholder="******************" required>
+                        <span class="password-toggle-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-eye" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                                <path
+                                    d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                            </svg>
+                        </span>
+                    </div>
+                    <p id="login-error-message" class="text-red-500 text-xs italic hidden mt-2">Username or password is
+                        incorrect.</p>
+                </div>
+                <div class="flex flex-col space-y-4">
+                    <button class="btn-primary font-bold py-2 px-4 rounded-lg" type="submit">Sign In</button>
+                    <a href="#" id="show-signup" class="inline-block align-baseline font-bold text-sm text-center"
+                        style="color: var(--accent-color);">Create an Account</a>
+                </div>
+            </form>
+        </div>
+
+        <div id="signup-view" class="hidden">
+            <form id="signup-form" class="form-container">
+                <h1 class="text-2xl font-bold text-center mb-6">Create Account</h1>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2" for="signup-username">New Username (Email)</label>
+                    <input class="shadow-inner appearance-none border rounded-lg w-full py-2 px-3" id="signup-username"
+                        type="email" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-bold mb-2" for="signup-password">New Password</label>
+                    <div class="password-container">
+                        <input class="shadow-inner appearance-none border rounded-lg w-full py-2 px-3 pr-10"
+                            id="signup-password" type="password" required>
+                        <span class="password-toggle-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                class="bi bi-eye" viewBox="0 0 16 16">
+                                <path
+                                    d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z" />
+                                <path
+                                    d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z" />
+                            </svg>
+                        </span>
+                    </div>
+                </div>
+                <p id="signup-error-message" class="text-red-500 text-xs italic hidden mt-2"></p>
+                <div class="flex flex-col space-y-4">
+                    <button class="btn-primary font-bold py-2 px-4 rounded-lg" type="submit">Create</button>
+                    <a href="#" id="show-login" class="inline-block align-baseline font-bold text-sm text-center"
+                        style="color: var(--accent-color);">Back to Login</a>
+                </div>
+            </form>
+        </div>
+
+        <footer class="text-center text-gray-400 text-xs mt-8">
+            <p>System by: Omar Abdelall</p>
+            <p>Email: moroplus15@gmail.com</p>
+            <p>Phone No: 01009715199</p>
+        </footer>
+    </div>
+    <!-- تم تغيير مصدر السكريبت ليكون من النوع module -->
+    <script src="./login.js" type="module"></script>
+</body>
+
+</html>
